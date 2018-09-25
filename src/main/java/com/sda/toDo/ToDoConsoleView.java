@@ -48,9 +48,18 @@ public String registerPaswword (){
     }
 
 public void displayError(String message){
+    System.out.println();
     System.out.println("Error");
     System.out.println(message);
     System.out.println("Error");
+
 }
 
+    public void displaySuccess(String message) {
+        System.out.println();
+        System.out.println("Success");
+        System.out.println(message);
+        System.out.println("Success");
+
+    }
 }

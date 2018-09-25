@@ -27,7 +27,7 @@ public class toDoApplication {
     public static void main(String[] args){
     Scanner scanner = new Scanner (System.in);
         ToDoRepository toDoRepository =new ToDoMemoryRepository();
-    ToDoUserRepository toDoUserRepository = new InMemomryToDoUserRepository(Arrays.asList(new ToDoUser("xyz","Szymon")));
+    ToDoUserRepository toDoUserRepository = new InMemomryToDoUserRepository();
     ToDoService toDoService = new ToDoService(toDoRepository, toDoUserRepository);
         ToDoConsoleView toDoConsoleView = new ToDoConsoleView(scanner);
         toDoApplication TodoApplication  = new toDoApplication (toDoService, toDoConsoleView,null);
@@ -45,7 +45,8 @@ public void start(){
              login();
              break;
          case 2:
-        break;
+            registerUser();
+             break;
          case 3:
              addNewToDo();
              break;
@@ -59,6 +60,16 @@ public void start(){
       }while(true);
 }
 
+    private void registerUser() {
+    String name=toDoConsoleView.registerName();
+    String password= toDoConsoleView.registerPaswword();
+    ToDoUser user = toDoService.register(name, password);
+     if(user==null){
+         toDoConsoleView.displayError("Nie można zarejestrować użytkownika. \n" + "uzytkownik o podanej nazwie juz istnieje");
+     }
+        toDoConsoleView.displaySuccess("Udalo sie zarejestrowac użytkownika" + name);
+    }
+
     private void login() {
         this.currentUser=null;
         String name = toDoConsoleView.logInName();
@@ -69,8 +80,13 @@ public void start(){
         } catch(ToDoUserDoesNotExists | InvalidPasswordException e){  //obsluga dwoch wyjatkow na raz
             toDoConsoleView.displayError(e.getMessage());
         }
+        if (this.currentUser != null) {
+            toDoConsoleView.displaySuccess("Uzytkownik o nicku \"" + name +"\" został zalogowany" );
+        }
 
     }
+
+
 
 
     private  void addNewToDo(){
