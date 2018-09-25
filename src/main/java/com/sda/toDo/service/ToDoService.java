@@ -8,6 +8,8 @@ import com.sda.toDo.repository.ToDoRepository;
 import com.sda.toDo.repository.ToDoUserRepository;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class ToDoService {
     private ToDoRepository toDoRepository;
@@ -36,4 +38,7 @@ public ToDoUser register (String name, String password){
 }
 
 
+    public List<ToDo> findAllToDos() {
+        return toDoRepository.findAll();
+    }
 }

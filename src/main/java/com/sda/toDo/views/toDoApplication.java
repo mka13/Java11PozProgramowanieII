@@ -51,6 +51,7 @@ public class toDoApplication {
                     addNewToDo();
                     break;
                 case 4:
+                   showToDoList();
                     break;
                 case 0:
 
@@ -62,6 +63,12 @@ public class toDoApplication {
 
             }
         } while (flag);
+    }
+
+    private void showToDoList() {
+        Integer option = toDoConsoleView.showToDolist(toDoService.findAllToDos());
+        System.out.println("Wybrano opjce: "+ option);
+
     }
 
     private void registerUser() {
@@ -96,12 +103,16 @@ public class toDoApplication {
             login();
 
         }
+        if(currentUser!=null){
+
+
         String todoName = toDoConsoleView.creatNewToDoName();
         String todoDescription = toDoConsoleView.creatNewToDoDescritpion();
         ToDo todo = new ToDo(todoName, this.currentUser);
         todo.setDescription(todoDescription);
 
         toDoService.save(todo);
+        }
     }
 
 }

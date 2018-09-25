@@ -7,8 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ToDoUser {
+    public static ToDoUser unassigned() {
+        return new ToDoUser(null,"Nie przypisano");
+    }
 
-private String password;
+    private String password;
 private String name;
 
 
