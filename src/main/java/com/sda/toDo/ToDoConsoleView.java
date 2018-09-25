@@ -46,4 +46,11 @@ public String registerPaswword (){
         System.out.println("Podaj opis zadania");
         return scanner.nextLine();
     }
+
+public void displayError(String message){
+    System.out.println("Error");
+    System.out.println(message);
+    System.out.println("Error");
+}
+
 }

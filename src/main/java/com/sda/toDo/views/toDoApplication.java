@@ -3,6 +3,8 @@ package com.sda.toDo.views;
 import com.sda.toDo.ToDoConsoleView;
 import com.sda.toDo.model.ToDo;
 import com.sda.toDo.model.ToDoUser;
+import com.sda.toDo.model.exception.InvalidPasswordException;
+import com.sda.toDo.model.exception.ToDoUserDoesNotExists;
 import com.sda.toDo.repository.InMemomryToDoUserRepository;
 import com.sda.toDo.repository.ToDoMemoryRepository;
 import com.sda.toDo.repository.ToDoRepository;
@@ -25,7 +27,7 @@ public class toDoApplication {
     public static void main(String[] args){
     Scanner scanner = new Scanner (System.in);
         ToDoRepository toDoRepository =new ToDoMemoryRepository();
-    ToDoUserRepository toDoUserRepository = new InMemomryToDoUserRepository(Arrays.asList(new ToDoUser("jfsi","Szymon")));
+    ToDoUserRepository toDoUserRepository = new InMemomryToDoUserRepository(Arrays.asList(new ToDoUser("xyz","Szymon")));
     ToDoService toDoService = new ToDoService(toDoRepository, toDoUserRepository);
         ToDoConsoleView toDoConsoleView = new ToDoConsoleView(scanner);
         toDoApplication TodoApplication  = new toDoApplication (toDoService, toDoConsoleView,null);
@@ -40,6 +42,7 @@ public void start(){
      Integer menutoption = toDoConsoleView.menu();
      switch (menutoption) {
          case 1:
+             login();
              break;
          case 2:
         break;
@@ -56,12 +59,23 @@ public void start(){
       }while(true);
 }
 
+    private void login() {
+        this.currentUser=null;
+        String name = toDoConsoleView.logInName();
 
-private  void addNewToDo(){
+        String password = toDoConsoleView.loginPassword();
+        try {
+            this.currentUser=toDoService.login(name,password);
+        } catch(ToDoUserDoesNotExists | InvalidPasswordException e){  //obsluga dwoch wyjatkow na raz
+            toDoConsoleView.displayError(e.getMessage());
+        }
+
+    }
+
+
+    private  void addNewToDo(){
         if(currentUser==null){
-            String name = toDoConsoleView.logInName();
-            String password = toDoConsoleView.loginPassword();
-            this.currentUser = toDoService.login(name, password);
+            login();
 
         }
         String todoName =toDoConsoleView.creatNewToDoName();
