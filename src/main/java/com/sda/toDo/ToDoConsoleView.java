@@ -15,7 +15,12 @@ public class ToDoConsoleView {
         this.scanner = scanner;
     }
 
-    public Integer menu() {
+    public static void displayAssignment(Optional<ToDo> todo, ToDoUser currentUser) {
+        System.out.println(todo.map(x -> "Przypisano " + currentUser.getName() + " do zadania \"" + x.getName() + "\"")
+                .orElse("zadanie nie istnieje"));
+    }
+
+        public Integer menu() {
         System.out.println("Todo application");
         System.out.println("1. Zaloguj");
         System.out.println("2. Zarejestruj");
@@ -98,9 +103,90 @@ public class ToDoConsoleView {
         System.out.println("4. Zmień status");
         System.out.println("0. Wyjdź");
         Integer option = scanner.nextInt();
-        scanner.nextLine();
+        //scanner.nextLine()
 
 
         return option;
+    }
+
+    public Integer getToDoID() {
+        String possibleID = scanner.nextLine();
+        int iD;
+        if (possibleID.length() == 0) {
+            System.out.println("Podaj numer zadania");
+            iD = scanner.nextInt();
+            scanner.nextLine();
+        } else {
+            iD = Integer.valueOf(possibleID.substring(1));
+        }
+
+
+        return iD;
+
+    }
+
+    public void showToWithDetails(Optional<ToDo> todo) {
+        String message = todo.map(x -> {
+            ToDoUser creator = x.getCreator();
+            Optional<ToDoUser> owner = Optional.ofNullable(x.getOwner());
+            return x.getName() + " (" + x.getToDoStatus().toString() + ") (\n" +
+                    x.getDescription() + "\n" +
+                    " Tworca: " + creator.getName() + "\n" +
+                    " Przyspisane: " + owner.orElse(ToDoUser.unassigned()).getName();
+        }).orElse("Zadanie nie istnieje");
+        System.out.println(message);
+    }
+
+    public Integer getToDoIDToRemove() {
+        String possibleID = scanner.nextLine();
+        Integer ID = possibleID.length() > 0 ?
+                getIdFromMessage(possibleID) :
+                askForIDToRemove();
+
+        return ID;
+
+    }
+
+    private Integer getIdFromMessage(String message) {
+        return Integer.valueOf(message.substring(1));
+    }
+
+    private Integer askForIDToRemove() {
+        System.out.println("Podaj ID zadania");
+        int toDoId = scanner.nextInt();
+        scanner.nextLine();
+        return toDoId;
+    }
+
+//    public String getPossibleID() {
+//        String possibleID = scanner.nextLine();
+////        if(possibleID.length()>0){
+////            return possibleID.substring(1);
+////        }else{
+////            return  possibleID;
+////        }
+//        return possibleID.length()>0 ?
+//                possibleID.substring(1):
+//                possibleID;
+//
+//    }
+
+    public Integer getTodoIdToRemove() {
+        System.out.println("Podaj numer zadania");
+        int id=scanner.nextInt();
+        scanner.nextLine();
+        return id;
+    }
+
+    public void displayToDoToRemove(Optional<ToDo> removeTodo) {
+        System.out.println(removeTodo.map(x -> "Usunieto zadanie " + x.getName())
+                .orElse("Zadanie nie istnieje"));
+    }
+
+    public String getPossibleID() {
+        String possibleId=scanner.nextLine();
+        return possibleId.length()>0 ?
+                possibleId.substring(1):
+                    possibleId;
     }
 }

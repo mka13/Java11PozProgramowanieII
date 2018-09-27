@@ -9,5 +9,8 @@ public interface ToDoRepository {
 void save (ToDo toDo);
 Optional<ToDo> findById (String id);
 List<ToDo> findAll();
+    Optional<ToDo> findById (Integer id);
+
+    void remove(int toDoIDToRemove);
 
 }

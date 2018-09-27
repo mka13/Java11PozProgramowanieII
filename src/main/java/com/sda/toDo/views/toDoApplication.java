@@ -14,6 +14,7 @@ import com.sda.toDo.service.ToDoService;
 import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Scanner;
 
 @AllArgsConstructor
@@ -67,7 +68,62 @@ public class toDoApplication {
 
     private void showToDoList() {
         Integer option = toDoConsoleView.showToDolist(toDoService.findAllToDos());
+        String possibleId=toDoConsoleView.getPossibleID();
         System.out.println("Wybrano opjce: "+ option);
+
+        switch(option) {
+            case 1:
+                showtToDo(possibleId);
+                break;
+            case 2:
+                removeToDo(possibleId);
+                break;
+            case 3:
+                assign(possibleId,currentUser);
+                break;
+
+        }
+
+
+    }
+
+    private void assign(String possibleId, ToDoUser currentUser) {
+        Integer toDoId = extractToDoiD(possibleId);
+        Optional<ToDo> todo = toDoService.findToDoById(toDoId);
+        if(todo.isPresent()){
+            ToDo toDoToChangeAssaignemnt = todo.get();
+            toDoToChangeAssaignemnt.setOwner(currentUser);
+                    }
+    ToDoConsoleView.displayAssignment(todo, currentUser);
+    }
+
+    private void removeToDo(String possibleId) {
+        Integer todoID = extractToDoiD(possibleId);
+   Optional<ToDo> removeTodo=toDoService.removeToDO(todoID);
+        toDoConsoleView.displayToDoToRemove(removeTodo);
+    }
+
+    private Integer extractToDoiD(String possibleId) {
+        Integer todoID; //---> definicja przed warunkiem zeby miec go w else i
+        if(possibleId.length()==0){
+            todoID= toDoConsoleView.getToDoID()-1;
+        }else{
+            todoID=Integer.valueOf(possibleId)-1;
+        }
+        return todoID;
+    }
+
+    private void showtToDo(String possibleId) {
+
+        Integer toDoID=extractToDoiD(possibleId);
+
+
+
+       Optional <ToDo> todo=toDoService.findToDoById(toDoID);
+        toDoConsoleView.showToWithDetails(todo);
+
+
+
 
     }
 
@@ -80,6 +136,11 @@ public class toDoApplication {
         }
         toDoConsoleView.displaySuccess("Udalo sie zarejestrowac użytkownika" + name);
     }
+
+
+
+
+
 
     private void login() {
         this.currentUser = null;

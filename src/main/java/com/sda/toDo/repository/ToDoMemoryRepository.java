@@ -48,4 +48,34 @@ public class ToDoMemoryRepository implements ToDoRepository {
 
 
     }
+
+    @Override
+    public Optional<ToDo> findById(Integer id) {
+//       if(id>=0 &id <toDos.size() ){
+//        return Optional.of(toDos.get(id));}
+//        return  Optional.empty();
+
+        // Operator 3 argumentowy
+
+
+        return (id>=0 &id <toDos.size() ) ?
+        Optional.of(toDos.get(id)) :
+        Optional.empty();
+
+     //jest to if else
+        // można tez nie przy zwracaniu:
+//        String message = id % 2==0 ?
+//                "even":
+//                "add";
+
+
+
+    }
+
+    @Override
+    public void remove(int toDoIDToRemove) {
+
+        toDos.remove(toDoIDToRemove);
+    }
+
 }

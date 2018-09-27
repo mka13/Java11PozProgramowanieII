@@ -9,6 +9,7 @@ import com.sda.toDo.repository.ToDoUserRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class ToDoService {
@@ -40,5 +41,21 @@ public ToDoUser register (String name, String password){
 
     public List<ToDo> findAllToDos() {
         return toDoRepository.findAll();
+    }
+
+    public Optional<ToDo> findToDoById(Integer toDoID) {
+        return toDoRepository.findById(toDoID );
+
+
+
+    }
+
+    public Optional<ToDo> removeToDO(Integer toDoIDToRemove) {
+
+        Optional<ToDo> toDo = toDoRepository.findById(toDoIDToRemove);
+        if (toDo.isPresent()) {
+            toDoRepository.remove(toDoIDToRemove);
+        }
+        return toDo;
     }
 }
